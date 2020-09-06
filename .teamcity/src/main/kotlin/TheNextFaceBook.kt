@@ -56,6 +56,12 @@ object Compile : BuildType({
         }
     }
 
+    triggers {
+        finishBuildTrigger {
+            buildType = "${ValidateConfig.id}"
+            successfulOnly = true
+        }
+    }
 
     dependencies {
         snapshot(ValidateConfig) {
