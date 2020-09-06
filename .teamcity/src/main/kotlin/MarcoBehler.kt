@@ -15,8 +15,6 @@ object MarcoBehler : Project({
 
 object MarcoBehlerRoot : GitVcsRoot(
     {
-
-        name = "TheNextFacebookVcs"
       url = "https://github.com/marcobehler/thenextfacebook.git"
     }
 )
