@@ -55,6 +55,11 @@ object Compile : BuildType({
         }
     }
 
+    dependencies {
+        snapshot(ValidateBuildConfig) {
+        }
+    }
+
     requirements {
         noLessThanVer("teamcity.agent.jvm.version", "11")
     }
