@@ -2,6 +2,7 @@ import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.finishBuildTrigger
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
+import settings.MarcoBehler
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -27,91 +28,4 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 
 version = "2020.1"
 
-project {
-
-    buildType(Package_1)
-    buildType(Test)
-    buildType(Build)
-    buildTypesOrder = arrayListOf(Build, Test, Package_1)
-}
-
-object Build : BuildType({
-    name = "Build"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "clean compile"
-        }
-    }
-
-    triggers {
-        vcs {
-        }
-    }
-
-    requirements {
-        noLessThanVer("teamcity.agent.jvm.specification", "11")
-    }
-})
-
-object Package_1 : BuildType({
-    id("Package")
-    name = "Package"
-
-    artifactRules = "+:target/*.jar"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "package"
-            runnerArgs = "-Dmaven.test.skip=true"
-        }
-    }
-
-    triggers {
-        finishBuildTrigger {
-            buildType = "${Test.id}"
-            successfulOnly = true
-        }
-    }
-
-    dependencies {
-        snapshot(Test) {
-            onDependencyFailure = FailureAction.CANCEL
-        }
-    }
-})
-
-object Test : BuildType({
-    name = "Test"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "test"
-        }
-    }
-
-    triggers {
-        finishBuildTrigger {
-            buildType = "${Build.id}"
-            successfulOnly = true
-        }
-    }
-
-    dependencies {
-        snapshot(Build) {
-            onDependencyFailure = FailureAction.FAIL_TO_START
-        }
-    }
-})
+project(MarcoBehler)
