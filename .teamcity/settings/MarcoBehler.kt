@@ -12,7 +12,7 @@ object MarcoBehler: Project({
     buildType(Package_1)
     buildType(Test)
     buildType(Build)
-    buildTypesOrder = arrayListOf(Build, Test, Package_1)
+    buildTypesOrder = arrayListOf(Build,  Package_1, Test)
 })
 
 object Build : BuildType({
