@@ -10,10 +10,11 @@ import jetbrains.buildServer.configs.kotlin.v2019_2.vcs.GitVcsRoot
 
 object TheNextFaceBook : Project({
     vcsRoot(TheNextFaceBookRoot)
+    buildType(ValidateBuildConfig)
     buildType(Compile)
     buildType(Test)
     buildType(Package)
-    buildTypesOrder = arrayListOf(Compile, Test, Package)
+    buildTypesOrder = arrayListOf(ValidateBuildConfig, Compile, Test, Package)
 })
 
 object TheNextFaceBookRoot : GitVcsRoot(
@@ -22,6 +23,19 @@ object TheNextFaceBookRoot : GitVcsRoot(
             url = "https://github.com/marcobehler/thenextfacebook.git"
         }
 )
+
+object ValidateBuildConfig : BuildType({
+    name = "Validate BuildConfig"
+    vcs {
+        root(TheNextFaceBookRoot)
+    }
+    steps {
+        maven {
+            goals = "clean test"
+            pomLocation = ".teamcity/pom.xml"
+        }
+    }
+})
 
 object Compile : BuildType({
     name = "Build"
