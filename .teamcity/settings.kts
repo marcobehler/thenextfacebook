@@ -2,7 +2,7 @@ import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.finishBuildTrigger
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
-import settings.MarcoBehler
+import settings.TheNextFaceBook
 
 /*
 The settings script is an entry point for defining a TeamCity
