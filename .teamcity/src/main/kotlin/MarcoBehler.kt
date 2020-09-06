@@ -4,6 +4,7 @@ import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.finishBuildTrigger
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
+import jetbrains.buildServer.configs.kotlin.v2019_2.vcs.GitVcsRoot
 
 object MarcoBehler : Project({
     buildType(Package_1)
@@ -12,8 +13,11 @@ object MarcoBehler : Project({
     buildTypesOrder = arrayListOf(Build, Package_1, Test)
 })
 
-object MarcoBehlerRoot : VcsRoot(
-    { name = "myRoot"}
+object MarcoBehlerRoot : GitVcsRoot(
+    {
+        name = "myRoot"
+      url = "https://github.com/marcobehler/thenextfacebook.git"
+    }
 )
 
 object Build : BuildType({
