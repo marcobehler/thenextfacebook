@@ -6,26 +6,26 @@ import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.finishBuildTrigger
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 import jetbrains.buildServer.configs.kotlin.v2019_2.vcs.GitVcsRoot
 
-object MarcoBehler : Project({
-    vcsRoot(MarcoBehlerRoot)
-    buildType(Package_1)
+object TheNextFaceBook : Project({
+    vcsRoot(TheNextFaceBookRoot)
+    buildType(Compile)
     buildType(Test)
-    buildType(Build)
-    buildTypesOrder = arrayListOf(Build, Package_1, Test)
+    buildType(Package)
+    buildTypesOrder = arrayListOf(Compile, Test, Package)
 })
 
-object MarcoBehlerRoot : GitVcsRoot(
-    {
-        name = "MarcoBehlerRoot"
-      url = "https://github.com/marcobehler/thenextfacebook.git"
-    }
+object TheNextFaceBookRoot : GitVcsRoot(
+        {
+            name = "TheNextFaceBookRoot"
+            url = "https://github.com/marcobehler/thenextfacebook.git"
+        }
 )
 
-object Build : BuildType({
+object Compile : BuildType({
     name = "Build"
 
     vcs {
-        root(MarcoBehlerRoot)
+        root(TheNextFaceBookRoot)
     }
 
     steps {
@@ -44,14 +44,41 @@ object Build : BuildType({
     }
 })
 
-object Package_1 : BuildType({
-    id("Package")
+object Test : BuildType({
+    name = "Test"
+
+    vcs {
+        root(TheNextFaceBookRoot)
+    }
+
+    steps {
+        maven {
+            goals = "test"
+        }
+    }
+
+    triggers {
+        finishBuildTrigger {
+            buildType = "${Compile.id}"
+            successfulOnly = true
+        }
+    }
+
+    dependencies {
+        snapshot(Compile) {
+            onDependencyFailure = FailureAction.FAIL_TO_START
+        }
+    }
+})
+
+
+object Package : BuildType({
     name = "Package"
 
     artifactRules = "+:target/*.jar"
 
     vcs {
-        root(MarcoBehlerRoot)
+        root(TheNextFaceBookRoot)
     }
 
     steps {
@@ -75,29 +102,3 @@ object Package_1 : BuildType({
     }
 })
 
-object Test : BuildType({
-    name = "Test"
-
-    vcs {
-        root(MarcoBehlerRoot)
-    }
-
-    steps {
-        maven {
-            goals = "test"
-        }
-    }
-
-    triggers {
-        finishBuildTrigger {
-            buildType = "${Build.id}"
-            successfulOnly = true
-        }
-    }
-
-    dependencies {
-        snapshot(Build) {
-            onDependencyFailure = FailureAction.FAIL_TO_START
-        }
-    }
-})
