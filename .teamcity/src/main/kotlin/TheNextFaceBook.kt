@@ -35,6 +35,12 @@ object ValidateBuildConfig : BuildType({
             pomLocation = ".teamcity/pom.xml"
         }
     }
+
+    triggers {
+        vcs {
+        }
+    }
+
 })
 
 object Compile : BuildType({
@@ -50,10 +56,6 @@ object Compile : BuildType({
         }
     }
 
-    triggers {
-        vcs {
-        }
-    }
 
     dependencies {
         snapshot(ValidateBuildConfig) {
