@@ -2,6 +2,7 @@ package patches.buildTypes
 
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.BuildType
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.v2019_2.ui.*
 
 /*
@@ -12,5 +13,12 @@ in the root project, and delete the patch script.
 create(DslContext.projectId, BuildType({
     id("ValidateBuildConfig")
     name = "Validate BuildConfig"
+
+    steps {
+        maven {
+            goals = "clean test"
+            pomLocation = ".teamcity/pom.xml"
+        }
+    }
 }))
 
