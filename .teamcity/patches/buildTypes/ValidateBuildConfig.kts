@@ -14,6 +14,10 @@ create(DslContext.projectId, BuildType({
     id("ValidateBuildConfig")
     name = "Validate BuildConfig"
 
+    vcs {
+        root(RelativeId("TheNextFaceBookRoot"))
+    }
+
     steps {
         maven {
             goals = "clean test"
