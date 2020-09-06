@@ -10,11 +10,11 @@ import jetbrains.buildServer.configs.kotlin.v2019_2.vcs.GitVcsRoot
 
 object TheNextFaceBook : Project({
     vcsRoot(TheNextFaceBookRoot)
-    buildType(ValidateBuildConfig)
+    buildType(ValidateConfig)
     buildType(Compile)
     buildType(Test)
     buildType(Package)
-    buildTypesOrder = arrayListOf(ValidateBuildConfig, Compile, Test, Package)
+    buildTypesOrder = arrayListOf(ValidateConfig, Compile, Test, Package)
 })
 
 object TheNextFaceBookRoot : GitVcsRoot(
@@ -24,8 +24,8 @@ object TheNextFaceBookRoot : GitVcsRoot(
         }
 )
 
-object ValidateBuildConfig : BuildType({
-    name = "Validate BuildConfig"
+object ValidateConfig : BuildType({
+    name = "Validate Config"
     vcs {
         root(TheNextFaceBookRoot)
     }
@@ -58,7 +58,8 @@ object Compile : BuildType({
 
 
     dependencies {
-        snapshot(ValidateBuildConfig) {
+        snapshot(ValidateConfig) {
+            onDependencyFailure = FailureAction.FAIL_TO_START
         }
     }
 
