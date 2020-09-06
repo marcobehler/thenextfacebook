@@ -1,19 +1,26 @@
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.MavenBuildStep
+import junit.framework.Assert.assertNotNull
+import junit.framework.Assert.assertTrue
 import org.junit.Test
-import settings.MarcoBehler
+import settings.TheNextFaceBook
 
 class StringTests {
 
-    val project = MarcoBehler
+    val project = TheNextFaceBook
 
     @Test
-    fun projectHasTestConfiguration() {
-
-        project.buildTypes.forEach{bt -> bt.steps.items.forEach { s -> if (s is MavenBuildStep) println(s.goals) }}
-
-
-        project.buildTypes.forEach {
-            bt -> println(bt)
+    fun projectHasTestStep() {
+        var testStep = project.buildTypes.flatMap { bt -> bt.steps.items }.find { step ->
+            step is MavenBuildStep && step.goals!!.contains("test")
         }
+        assertNotNull(testStep);
+    }
+
+    @Test
+    fun buildConfigsRequireJava11() {
+        val i = project.buildTypes.flatMap { bt -> bt.requirements.items }
+        val all = i.all { r -> (r.param.equals("teamcity.agent.jvm.version") && r.value.equals("11")) }
+        assertTrue(all)
+
     }
 }

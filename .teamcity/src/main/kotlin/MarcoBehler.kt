@@ -40,7 +40,7 @@ object Compile : BuildType({
     }
 
     requirements {
-        noLessThanVer("teamcity.agent.jvm.specification", "11")
+        noLessThanVer("teamcity.agent.jvm.version", "11")
     }
 })
 
