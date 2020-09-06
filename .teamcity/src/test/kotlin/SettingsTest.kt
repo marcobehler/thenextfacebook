@@ -1,3 +1,4 @@
+import jetbrains.buildServer.configs.kotlin.Context
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.MavenBuildStep
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
 import junit.framework.Assert.assertFalse
