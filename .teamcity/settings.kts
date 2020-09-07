@@ -28,18 +28,26 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2020.1"
 
 project {
-
-    buildType(Package_1)
+    vcsRoot(TheNextFaceBookRoot)
+    buildType(Compile)
     buildType(Test)
-    buildType(Build)
-    buildTypesOrder = arrayListOf(Build, Test, Package_1)
+    buildType(Package)
+
+    buildTypesOrder = arrayListOf(Compile, Test, Package)
 }
 
-object Build : BuildType({
+object TheNextFaceBookRoot : GitVcsRoot(
+    {
+        name = "TheNextFaceBookRoot"
+        url = "https://github.com/marcobehler/thenextfacebook.git"
+    }
+)
+
+object Compile : BuildType({
     name = "Build"
 
     vcs {
-        root(DslContext.settingsRoot)
+        root(TheNextFaceBookRoot)
     }
 
     steps {
@@ -58,14 +66,42 @@ object Build : BuildType({
     }
 })
 
-object Package_1 : BuildType({
+object Test : BuildType({
+    name = "Test"
+
+    vcs {
+        root(TheNextFaceBookRoot)
+    }
+
+    steps {
+        maven {
+            goals = "test"
+        }
+    }
+
+    triggers {
+        finishBuildTrigger {
+            buildType = "${Compile.id}"
+            successfulOnly = true
+        }
+    }
+
+    dependencies {
+        snapshot(Compile) {
+            onDependencyFailure = FailureAction.FAIL_TO_START
+        }
+    }
+})
+
+
+object Package : BuildType({
     id("Package")
     name = "Package"
 
     artifactRules = "+:target/*.jar"
 
     vcs {
-        root(DslContext.settingsRoot)
+        root(TheNextFaceBookRoot)
     }
 
     steps {
@@ -89,29 +125,3 @@ object Package_1 : BuildType({
     }
 })
 
-object Test : BuildType({
-    name = "Test"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "test"
-        }
-    }
-
-    triggers {
-        finishBuildTrigger {
-            buildType = "${Build.id}"
-            successfulOnly = true
-        }
-    }
-
-    dependencies {
-        snapshot(Build) {
-            onDependencyFailure = FailureAction.FAIL_TO_START
-        }
-    }
-})
