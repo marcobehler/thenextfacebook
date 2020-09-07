@@ -14,7 +14,7 @@ class TheNextFacebookSettingsTest {
     @Test
     fun projectHasTestConfiguration() {
         val mavenTestConfiguration = project.buildTypes.flatMap { bt -> bt.steps.items }.find { step ->
-            step is MavenBuildStep && step.goals!!.contains("test")
+            step is MavenBuildStep && step.goals!!.equals("test") // mvn test
         }
         assertThat(mavenTestConfiguration).isNotNull();
     }

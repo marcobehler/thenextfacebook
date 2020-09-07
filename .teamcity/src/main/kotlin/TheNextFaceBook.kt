@@ -82,8 +82,8 @@ object Test : BuildType({
     }
 
     steps {
-        maven {
-            goals = "test"
+     maven {
+        goals = "test"
         }
     }
 
