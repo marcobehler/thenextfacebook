@@ -45,7 +45,7 @@ object TheNextFaceBookRoot : GitVcsRoot(
 )
 
 object Compile : BuildType({
-    name = "Build"
+    name = "Compile"
 
     vcs {
         root(TheNextFaceBookRoot)
@@ -96,7 +96,6 @@ object Test : BuildType({
 
 
 object Package : BuildType({
-    id("Package")
     name = "Package"
 
     artifactRules = "+:target/*.jar"
