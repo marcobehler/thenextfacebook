@@ -41,6 +41,10 @@ object ValidateConfig : BuildType({
         }
     }
 
+    requirements {
+        noLessThanVer("teamcity.agent.jvm.version", "11")
+    }
+
 })
 
 object Compile : BuildType({
@@ -99,6 +103,10 @@ object Test : BuildType({
             onDependencyFailure = FailureAction.FAIL_TO_START
         }
     }
+
+    requirements {
+        noLessThanVer("teamcity.agent.jvm.version", "11")
+    }
 })
 
 
@@ -129,6 +137,10 @@ object Package : BuildType({
         snapshot(Test) {
             onDependencyFailure = FailureAction.CANCEL
         }
+    }
+
+    requirements {
+        noLessThanVer("teamcity.agent.jvm.version", "11")
     }
 })
 
